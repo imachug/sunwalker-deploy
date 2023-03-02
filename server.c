@@ -14,6 +14,8 @@
 int sock_fd;
 int total_blocks;
 int last_block_sent;
+int last_block_sent1;
+int last_block_sent2;
 
 FILE *f;
 
@@ -94,7 +96,7 @@ void answer_queries() {
            i++) {
         int first = ntohl(report->intervals[i].first);
         int last = ntohl(report->intervals[i].last);
-        for (int block = first; block <= last && block <= last_block_sent;
+        for (int block = first; block <= last && block <= last_block_sent2;
              block++) {
           int should_send = 1;
           int should_add = 1;
@@ -208,11 +210,19 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  int iteratee = time(NULL);
+
   while (!feof(f)) {
     answer_queries();
 
     int block = ftell(f) / BLOCK_SIZE;
     last_block_sent = block;
+
+    if (time(NULL) != iteratee) {
+      last_block_sent2 = last_block_sent1;
+      last_block_sent1 = last_block_sent;
+      iteratee = time(NULL);
+    }
 
     char buf_to_send[12 + BLOCK_SIZE];
     memcpy(buf_to_send, "SHRE", 4);
@@ -229,8 +239,10 @@ int main(int argc, char **argv) {
       exit(1);
     }
 
-    usleep(1000);
+    // usleep(100);
   }
+
+  last_block_sent2 = ftell(f) / BLOCK_SIZE;
 
   for (;;) {
     answer_queries();

@@ -135,9 +135,12 @@ void receive_pending() {
           int block_size = n_recv - 12;
           long block_start = (long)block * BLOCK_SIZE;
           long block_end = block_start + block_size;
-          if (cur_f_size < block_end && ftruncate(fileno(f), block_end) == -1) {
-            perror("ftruncate");
-            exit(1);
+          if (cur_f_size < block_end) {
+            if (ftruncate(fileno(f), block_end) == -1) {
+              perror("ftruncate");
+              exit(1);
+            }
+            cur_f_size = block_end;
           }
           if (fseek(f, block_start, SEEK_SET) == -1) {
             perror("fseek");
