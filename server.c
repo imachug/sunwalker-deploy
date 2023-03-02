@@ -223,13 +223,13 @@ int main(int argc, char **argv) {
       exit(1);
     }
     *(int *)(buf_to_send + 8) = htonl(total_blocks);
-    if (sendto(sock_fd, buf_to_send, n_read + 12, 0, (struct sockaddr *)&addr,
-               sizeof(addr)) == -1) {
-      perror("sendto");
-      exit(1);
+    for (int i = 0; i < 8; i++) {
+      if (sendto(sock_fd, buf_to_send, n_read + 12, 0, (struct sockaddr *)&addr,
+                 sizeof(addr)) == -1) {
+        perror("sendto");
+        exit(1);
+      }
     }
-
-    usleep(1000);
   }
 
   for (;;) {
