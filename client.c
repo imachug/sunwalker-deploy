@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define BLOCK_SIZE 1024
+#define BLOCK_SIZE 1400
 #define N_INTERVALS 128
 
 int sock_fd;
