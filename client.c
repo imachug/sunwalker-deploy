@@ -160,8 +160,8 @@ void receive_pending() {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+  if (argc != 3) {
+    fprintf(stderr, "Usage: %s <file> <broadcast_addr>\n", argv[0]);
     return 0;
   }
 
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
     perror("bind");
     return 1;
   }
-  addr.sin_addr.s_addr = htonl(0xc0a82bff) /*INADDR_BROADCAST*/;
+  addr.sin_addr.s_addr = inet_addr(argv[2]);
 
   if (setsockopt(sock_fd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one)) == -1) {
     perror("setsockopt");
