@@ -94,7 +94,6 @@ void answer_queries() {
            i++) {
         int first = ntohl(report->intervals[i].first);
         int last = ntohl(report->intervals[i].last);
-        printf("%d %d\n", first, last);
         for (int block = first; block <= last && block <= last_block_sent;
              block++) {
           int should_send = 1;
@@ -230,7 +229,7 @@ int main(int argc, char **argv) {
       exit(1);
     }
 
-    usleep(100);
+    usleep(1000);
   }
 
   for (;;) {

@@ -114,9 +114,6 @@ void receive_pending() {
       int block = ntohl(*(int *)(buf_to_recv + 4));
 
       if (block > max_block_seen) {
-        if (block != max_block_seen + 1) {
-          fprintf(stderr, "%d..%d\n", max_block_seen, block);
-        }
         for (int i = max_block_seen + 1; i <= block; i++) {
           struct missing_block_t *info = malloc(sizeof(struct missing_block_t));
           info->block = i;
