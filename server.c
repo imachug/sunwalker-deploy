@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
     perror("bind");
     return 1;
   }
-  addr.sin_addr.s_addr = htonl(0xc0a801ff) /*INADDR_BROADCAST*/;
+  addr.sin_addr.s_addr = htonl(0xc0a82bff) /*INADDR_BROADCAST*/;
 
   if (setsockopt(sock_fd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one)) == -1) {
     perror("setsockopt");
@@ -223,13 +223,13 @@ int main(int argc, char **argv) {
       exit(1);
     }
     *(int *)(buf_to_send + 8) = htonl(total_blocks);
-    for (int i = 0; i < 8; i++) {
-      if (sendto(sock_fd, buf_to_send, n_read + 12, 0, (struct sockaddr *)&addr,
-                 sizeof(addr)) == -1) {
-        perror("sendto");
-        exit(1);
-      }
+    if (sendto(sock_fd, buf_to_send, n_read + 12, 0, (struct sockaddr *)&addr,
+               sizeof(addr)) == -1) {
+      perror("sendto");
+      exit(1);
     }
+
+    usleep(1000);
   }
 
   for (;;) {

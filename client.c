@@ -59,7 +59,7 @@ void maybe_announce() {
   }
 
   if ((missing_blocks != NULL || max_block_seen < total_blocks - 1) &&
-      last_announce < time(NULL) - 5) {
+      last_announce < time(NULL)) {
     last_announce = time(NULL);
 
     struct missing_report_t buf;
@@ -112,6 +112,7 @@ void receive_pending() {
 
     if (n_recv >= 8 && memcmp(buf_to_recv, "SHRE", 4) == 0) {
       int block = ntohl(*(int *)(buf_to_recv + 4));
+      printf("%d\n", block);
 
       if (block > max_block_seen) {
         for (int i = max_block_seen + 1; i <= block; i++) {
@@ -187,7 +188,7 @@ int main(int argc, char **argv) {
     perror("bind");
     return 1;
   }
-  addr.sin_addr.s_addr = htonl(0xc0a801ff) /*INADDR_BROADCAST*/;
+  addr.sin_addr.s_addr = htonl(0xc0a82bff) /*INADDR_BROADCAST*/;
 
   if (setsockopt(sock_fd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one)) == -1) {
     perror("setsockopt");
