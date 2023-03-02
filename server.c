@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
     perror("bind");
     return 1;
   }
-  addr.sin_addr.s_addr = 0xffffff7f /*INADDR_BROADCAST*/;
+  addr.sin_addr.s_addr = INADDR_BROADCAST;
 
   if (setsockopt(sock_fd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one)) == -1) {
     perror("setsockopt");
