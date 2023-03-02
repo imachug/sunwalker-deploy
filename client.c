@@ -112,7 +112,6 @@ void receive_pending() {
 
     if (n_recv >= 8 && memcmp(buf_to_recv, "SHRE", 4) == 0) {
       int block = ntohl(*(int *)(buf_to_recv + 4));
-      printf("%d\n", block);
 
       if (block > max_block_seen) {
         for (int i = max_block_seen + 1; i <= block; i++) {
